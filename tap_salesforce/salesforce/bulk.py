@@ -282,24 +282,26 @@ class Bulk():
             endpoint = "job/{}/batch/{}/result/{}".format(job_id, batch_id, result)
             url = self.bulk_url.format(self.sf.instance_url, endpoint)
             headers['Content-Type'] = 'text/csv'
+            csv_file_name = f"/project/output/{catalog_entry['stream']}_{batch_id}.csv"
 
-            with tempfile.NamedTemporaryFile(mode="w+", encoding="utf8") as csv_file:
+            with open(csv_file_name, mode="a", encoding="utf8") as csv_file:
                 resp = self.sf._make_request('GET', url, headers=headers, stream=True)
                 for chunk in resp.iter_content(chunk_size=ITER_CHUNK_SIZE, decode_unicode=True):
                     if chunk:
                         # Replace any NULL bytes in the chunk so it can be safely given to the CSV reader
                         csv_file.write(chunk.replace('\0', ''))
 
-                csv_file.seek(0)
-                csv_reader = csv.reader(csv_file,
-                                        delimiter=',',
-                                        quotechar='"')
+                # csv_file.seek(0)
+                # csv_reader = csv.reader(csv_file,
+                #                         delimiter=',',
+                #                         quotechar='"')
 
-                column_name_list = next(csv_reader)
+                # column_name_list = next(csv_reader)
 
-                for line in csv_reader:
-                    rec = dict(zip(column_name_list, line))
-                    yield rec
+                # for line in csv_reader:
+                #     rec = dict(zip(column_name_list, line))
+                #     yield rec
+            yield {"file_path": csv_file_name}
 
     def _close_job(self, job_id):
         endpoint = "job/{}".format(job_id)
