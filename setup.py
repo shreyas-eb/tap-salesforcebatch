@@ -2,7 +2,7 @@
 
 from setuptools import setup
 
-setup(name='tap-salesforce',
+setup(name='tap-salesforcebatch',
       version='1.5.1',
       description='Singer.io tap for extracting data from the Salesforce API',
       author='Stitch',
