@@ -282,7 +282,7 @@ class Bulk():
             endpoint = "job/{}/batch/{}/result/{}".format(job_id, batch_id, result)
             url = self.bulk_url.format(self.sf.instance_url, endpoint)
             headers['Content-Type'] = 'text/csv'
-            csv_file_name = f"/project/output/{catalog_entry['stream']}_{batch_id}.csv"
+            csv_file_name = f"./output/{catalog_entry['stream']}_{batch_id}.csv"
 
             with open(csv_file_name, mode="a", encoding="utf8") as csv_file:
                 resp = self.sf._make_request('GET', url, headers=headers, stream=True)
